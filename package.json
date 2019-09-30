@@ -7,21 +7,21 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:dev": "webpack --env dev --progress --profile --colors",
     "build:prod": "webpack --env prod --progress --profile --colors",
-    "dev": "webpack-dev-server --inline --hot --no-info --env dev"
+    "dev": "webpack-dev-server --inline --hot --no-info --env dev",
+    "postinstall": "webpack --env prod",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.17.1",
     "history": "^4.9.0",
-    "jwt-decode": "^2.2.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-redux": "^6.0.1",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-router-redux": "^4.0.8",
-    "react-spotify-api": "^2.4.0",
-    "react-spotify-web-playback": "^0.6.0",
     "react-transition-group": "^2.9.0",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0"
