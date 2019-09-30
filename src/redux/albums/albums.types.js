@@ -1,0 +1,7 @@
+const albumbTypes = {
+    FETCH_ALBUMS_START: 'FETCH_ALBUMS_START',
+    FETCH_ALBUMS_SUCCESS: 'FETCH_ALBUMS_SUCCESS',
+    FETCH_ALBUMS_ERROR: 'FETCH_ALBUMS_ERROR'
+}
+
+export default albumbTypes

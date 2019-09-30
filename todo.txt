@@ -1,0 +1,21 @@
+
+
+featured playlists => browse
+categories => category playlist => browse
+user playlists => plylists
+playlist search => search
+user tracks => search user traack< => libarr
+
+
+todo: 
+    user playlist view
+    category view
+    use user tracks button
+    playlist search
+
+    prettify the playarea 
+        // controls play/replay (no stop or or )
+        // show button (options what to hide)
+        // next button (mutes, plays next)
+
+
