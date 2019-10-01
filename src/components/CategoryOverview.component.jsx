@@ -16,7 +16,7 @@ const FeaturedPlaylists = ({token, categories, fetchCategories, fetchCategoriesE
         console.error(fetchCategoriesError)
     }
     
-    console.log(categories)
+  
    
     return (
         <div className="playlists-display">

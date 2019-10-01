@@ -1,51 +1,65 @@
 import React, {useEffect, useState} from 'react'
 import {connect} from "react-redux"
-import {fetchPlaylistSongs, setCurrentSong} from "../redux/songs/songs.actions"
+import {fetchPlaylistSongs, nextSong} from "../redux/songs/songs.actions"
 
 
 let audio = null
 
-const GamePage = ({match, fetchPlaylistSongs, token, songs, currentSong,setCurrentSong, fetchSongsError}) => {
+/**
+ * get playlist id in url an then fetches playlist (if no playlist => user tracks random)
+ * => set the playlist (pre randomize playlist) // filter out without preview / randomizes / set count etc / set first song
+ * if(playlist is set) => 
+ */
+
+const GamePage = (props) => {
+    const {
+        match,      
+        token,
+        songs,  
+        currentSongIndex,
+        fetchSongsError,
+        fetchPlaylistSongs, 
+        nextSong,   
+    } = props
 
     const [revealed, setRevealed] = useState(false)
-
-    const playlistId = match.params.playlistId
+    const [currentSong, setCurrentSong] = useState(null)
+    
     useEffect(() => {
-        fetchPlaylistSongs(playlistId, token)
+        const playlistId = match.params.playlistId
+        if(playlistId){
+            fetchPlaylistSongs(playlistId, token)
+        }else{
+
+        }    
+        
+        return () => {
+            if(audio){
+             stopSong()
+             audio = null;
+            }         
+        }
     }, [])
 
-   
-    useEffect(() => {
-        if(songs && songs.length !== 0){
-            newRandomSong()
-        }      
-    }, [songs])
-
-    useEffect(() => {
-        if(currentSong){
-            playSong()
-        }
-    }, [currentSong])
+ 
+    // update song
+   useEffect(() => { 
+       if(songs && songs.length != 0){
+        const song = songs[currentSongIndex]
+        playSong(song)
+        setCurrentSong(song) 
+       }
+       
+    }, [currentSongIndex, songs])
 
 
-    const playSong = () => {
-        if(audio){
-            stopSong()
-        }
-        audio = new Audio(currentSong.track.preview_url);
+    const playSong = (song) => {
+        if(audio){ stopSong() }
+        audio = new Audio(song.track.preview_url);
 	    audio.play();
     }
 
-    const stopSong = () => {
-        audio.pause()
-    }
-
-    const newRandomSong = () => {
-        const randomSong = songs[Math.floor(Math.random() * songs.length)];
-        setCurrentSong(randomSong)
-    }
-
-    console.log(currentSong)
+    const stopSong = () => audio.pause()
 
     const onButtonClick = () => {
         if(!revealed){
@@ -54,7 +68,7 @@ const GamePage = ({match, fetchPlaylistSongs, token, songs, currentSong,setCurre
         }else{
             // switch to next song
             stopSong();
-            newRandomSong();
+            nextSong(currentSongIndex);
             setRevealed(false)
         }
     }
@@ -63,7 +77,6 @@ const GamePage = ({match, fetchPlaylistSongs, token, songs, currentSong,setCurre
     return (
         <div className="game-page">
             <h1>Guess the Year...</h1>
-
 
             {currentSong && (
                 <div className="song-display">
@@ -75,31 +88,22 @@ const GamePage = ({match, fetchPlaylistSongs, token, songs, currentSong,setCurre
                         <a href={currentSong.track.external_urls.spotify}>listen on Spotify</a>
                     </div>
 
-                    {/* currentSong.track.preview_url && (
-                        <div>
-                            <button onClick={playSong}>play song</button>
-                            <button onClick={stopSong}>stop song</button>
-                        </div>
-                    )*/}
-
                     <button className="song-display__control" onClick={onButtonClick}>{!revealed ? "Reveal" : "Next Song"}</button>
                 </div>
             )}
-
-
         </div>
     )
 }
 
-const mapStateToProps = ({tokenReducer, songsReducer: {currentSong, fetchSongsError, songs}}) => ({
+const mapStateToProps = ({tokenReducer, songsReducer: {currentSongIndex, fetchSongsError, songs}}) => ({
     token: tokenReducer.token,
     songs,
     fetchSongsError,
-    currentSong,
+    currentSongIndex,
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    setCurrentSong: (song) => dispatch(setCurrentSong(song)),
+    nextSong: (currentSongIndex) => dispatch(nextSong(currentSongIndex)),
     fetchPlaylistSongs: (playlistId,token) => dispatch(fetchPlaylistSongs(playlistId,token))
 })
 

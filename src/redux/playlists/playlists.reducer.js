@@ -13,32 +13,77 @@ const INITIAL_STATE = {
     fetchFeaturedPlaylistsPending: false,
     fetchFeaturedPlaylistsError: null,
 
+    categoryPlaylists: [],
+    fetchCategoryPlaylistsPending: false,
+    fetchCategoryPlaylistsError: null,
+
     searchedPlaylists: [],
-    categoryPlaylists: {}
+    fetchSearchedPlaylistsPending: false,
+    fetchSearchedPlaylistsError: null,
 }
 
 export const playlistReducer = (state = INITIAL_STATE, action) => {
   console.log(action)
     switch (action.type) {
 
-    case playlistTypes.FETCH_USER_PLAYLISTS_START:
-      return {...state, fetchUserPlaylistsPending: true }
-    
-    case playlistTypes.FETCH_USER_PLAYLISTS_SUCCESS:
-      return{
-        ...state,
-        userPlaylists: action.payload,
-        fetchUserPlaylistsPending: false,
-        fetchUserPlaylistsError: null,
-      }
+      /* handle CATEGORY PLAYLISTS */
+      case playlistTypes.FETCH_CATEGORY_PLAYLISTS_START:
+          return {...state, fetchCategoryPlaylistsPending: true }
+        
+      case playlistTypes.FETCH_CATEGORY_PLAYLISTS_SUCCESS:
+        return{
+          ...state,
+          categoryPlaylists: action.payload,
+          fetchCategoryPlaylistsPending: false,
+          fetchCategoryPlaylistsError: null,
+        }
+  
+      case playlistTypes.FETCH_CATEGORY_PLAYLISTS_ERROR:
+        return{
+          ...state,
+          fetchCategoryPlaylistsPending: false,
+          fetchCategoryPlaylistsError: action.payload,
+        }
 
-    case playlistTypes.FETCH_PLAYLIST_MENU_ERROR:
-      return{
-        ...state,
-        fetchUserPlaylistsPending: false,
-        fetchUserPlaylistsError: action.payload,
-      }
+       /* handle SEARCH PLAYLISTS */
+      case playlistTypes.SEARCH_PLAYLISTS_START:
+          return {...state, fetchSearchedPlaylistsPending: true }
+        
+      case playlistTypes.SEARCH_PLAYLISTS_SUCCESS:
+        return{
+          ...state,
+          searchedPlaylists: action.payload,
+          fetchSearchedPlaylistsPending: false,
+          fetchSearchedPlaylistsError: null,
+        }
+  
+      case playlistTypes.SEARCH_PLAYLISTS_ERROR:
+        return{
+          ...state,
+          fetchSearchedPlaylistsPending: false,
+          fetchSearchedPlaylistsError: action.payload,
+        }
 
+       /* handle USER PLAYISTS */
+      case playlistTypes.FETCH_USER_PLAYLISTS_START:
+        return {...state, fetchUserPlaylistsPending: true }
+      
+      case playlistTypes.FETCH_USER_PLAYLISTS_SUCCESS:
+        return{
+          ...state,
+          userPlaylists: action.payload,
+          fetchUserPlaylistsPending: false,
+          fetchUserPlaylistsError: null,
+        }
+
+      case playlistTypes.FETCH_USER_PLAYLISTS_ERROR:
+        return{
+          ...state,
+          fetchUserPlaylistsPending: false,
+          fetchUserPlaylistsError: action.payload,
+        }
+
+       /* handle FEATURED PLAYLISTS */
       case playlistTypes.FETCH_FEATURED_PLAYLISTS_START:
           return {...state, fetchFeaturedPlaylistsPending: true }
         
@@ -56,37 +101,6 @@ export const playlistReducer = (state = INITIAL_STATE, action) => {
           fetchFeaturedPlaylistsPending: false,
           fetchFeaturedPlaylistsError: action.payload,
         }
-  
-    case playlistTypes.FETCH_PLAYLIST_MENU_START:
-      return {
-        fetchPlaylistPending: true,
-        ...state
-      };
-  
-    case playlistTypes.FETCH_PLAYLIST_MENU_SUCCESS:
-      return {
-        ...state,
-        playlists: action.payload,
-        fetchPlaylistError: null,
-        fetchPlaylistPending: false,     
-      };
-  
-    case playlistTypes.ADD_PLAYLIST_ITEM:
-      return {
-        ...state,
-        playlists: [
-          ...state.playlists,
-          action.payload
-        ]
-      };
-  
-    case playlistTypes.FETCH_PLAYLIST_MENU_ERROR:
-      return {
-        ...state,
-        fetchPlaylistError: action.payload,
-        fetchPlaylistPending: false,       
-      };
-  
     default:
       return state;
     }

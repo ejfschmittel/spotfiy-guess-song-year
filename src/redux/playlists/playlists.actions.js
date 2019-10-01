@@ -3,6 +3,59 @@ import createRequestObject from "../utils/createRequestObject"
 
 
 
+const fetchCategoryPlaylistsStart = () => ({
+    type: playlistTypes.FETCH_CATEGORY_PLAYLISTS_START
+})
+
+const fetchCategoryPlaylistsSuccess = (playlists) => ({
+    type: playlistTypes.FETCH_CATEGORY_PLAYLISTS_SUCCESS,
+    payload: playlists
+})
+
+const fetchCategoriesPlaylistsError = (error) => ({
+    type: playlistTypes.FETCH_CATEGORY_PLAYLISTS_ERROR,
+    paylaod: error
+})
+
+export const fetchCategoryPlaylists = (categoryId, accessToken) => dispatch => {
+    const url = `https://api.spotify.com/v1/browse/categories/${categoryId}/playlists?limit=50`
+
+    dispatch(fetchCategoryPlaylistsStart())
+
+    fetch(url, createRequestObject(accessToken, {}))
+    .then(res => res.json())
+    .then(json => dispatch(fetchCategoryPlaylistsSuccess(json.playlists.items)))
+    .catch(error => dispatch(fetchCategoriesPlaylistsError(error)))
+}
+
+
+const seachPlaylistsStart = () => ({
+    type: playlistTypes.SEARCH_PLAYLISTS_START
+})
+
+const searchPlaylistsSuccess = (playlists) => ({
+    type: playlistTypes.SEARCH_PLAYLISTS_SUCCESS,
+    payload: playlists
+})
+
+const searchPlaylisstsError = (error) => ({
+    type: playlistTypes.SEARCH_PLAYLISTS_ERROR,
+    paylaod: error
+})
+
+export const searchPlaylists = (searchTerm, accessToken) => dispatch => {
+    const url = `https://api.spotify.com/v1/search?q=${searchTerm}&type=playlist&limit=50`
+
+    dispatch(seachPlaylistsStart())
+
+    fetch(url, createRequestObject(accessToken, {}))
+    .then(res => res.json())
+    .then(json => dispatch(searchPlaylistsSuccess(json.playlists.items)))
+    .catch(error => dispatch(searchPlaylisstsError(error)))
+}
+
+
+
 const fetchUserPlaylistsStart = () => ({
     type: playlistTypes.FETCH_USER_PLAYLISTS_START
 })
@@ -53,32 +106,3 @@ export const fetchFeaturedPlaylists = (accessToken) => dispatch => {
 }
 
 
-
-const fetchPlaylistMenuStart = () => ({
-    type: playlistTypes.FETCH_PLAYLIST_MENU_START
-})
-
-const fetchPlaylistMenuSuccess = (playlists) => ({
-    type: playlistTypes.FETCH_PLAYLIST_MENU_SUCCESS,
-    payload: playlists
-})
-
-const fetchPlaylistMenuError = (error) => ({
-    type: playlistTypes.FETCH_PLAYLIST_MENU_ERROR,
-    paylaod: error
-})
-
-export const addPlaylistItem = (playlist) => ({
-    type: playlistTypes.ADD_PLAYLIST_ITEM,
-    payload: playlist
-})
-
-export const fetchPlaylistMenu = (userId, accessToken) => dispatch => {
-    const url = `https://api.spotify.com/v1/users/${userId}/playlists`
-    dispatch(fetchPlaylistMenuStart())
-
-    fetch(url, createRequestObject(accessToken, {}))
-    .then(res => res.json())
-    .then(json => dispatch(fetchPlaylistMenuSuccess(json.items)))
-    .catch(err => dispatch(fetchPlaylistMenuError))
-}
