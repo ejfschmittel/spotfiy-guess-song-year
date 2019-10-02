@@ -4,6 +4,7 @@ const songsTypes = {
     FETCH_SONGS_ERROR: 'FETCH_SONGS_ERROR',
 
     SET_CURRENT_SONG_INDEX: 'SET_CURRENT_SONG_INDEX',
+    RESET_SONGS: 'RESET_SONGS',
 }
 
 export default songsTypes

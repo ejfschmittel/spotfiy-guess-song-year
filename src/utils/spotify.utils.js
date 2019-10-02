@@ -1,5 +1,4 @@
 const CLIENT_ID = "7e3ba1ff0efe4b9897e67fc21f51e09a"
-const clientSecret = "135521ef2dbe4e8cafd17149729f6090"
 export const authEndpoint = 'https://accounts.spotify.com/authorize';
 const DEFAULT_REDIRECT_URI = "http://localhost:3000"
 const HEROKU_REDIRECT_URI = "https://spotify-song-guesser.herokuapp.com/"

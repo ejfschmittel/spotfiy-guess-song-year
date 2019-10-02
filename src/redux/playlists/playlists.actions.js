@@ -44,7 +44,8 @@ const searchPlaylisstsError = (error) => ({
 })
 
 export const searchPlaylists = (searchTerm, accessToken) => dispatch => {
-    const url = `https://api.spotify.com/v1/search?q=${searchTerm}&type=playlist&limit=50`
+    const encodedSearchTerm = encodeURI(searchTerm)
+    const url = `https://api.spotify.com/v1/search?q=${encodedSearchTerm}&type=playlist&limit=50`
 
     dispatch(seachPlaylistsStart())
 

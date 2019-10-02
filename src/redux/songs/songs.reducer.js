@@ -53,6 +53,9 @@ const INITIAL_STATE = {
         fetchSongsPending: false
       };
   
+    case songsTypes.RESET_SONGS:
+      return INITIAL_STATE
+
     default:
       return state;
     }

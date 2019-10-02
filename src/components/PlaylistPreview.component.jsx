@@ -9,7 +9,6 @@ const PlaylistPreview = ({item}) => (
             <span className="playlist-preview__track-count">tracks: {item.tracks.total}</span>
         </div>
         <div className="playlist-preview__overlay">
-            <Link to="/" className="playlist-preview__overlay-button">View Playlist</Link>
             <Link to={`/game/${item.id}`} className="playlist-preview__overlay-button">start Game</Link>
         </div>
     </div>

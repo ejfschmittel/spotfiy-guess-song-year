@@ -12,6 +12,7 @@ import Header from "./components/Header"
 import OverviewSearchpage from "./pages/OverviewSearchPage"
 import GamePage from "./pages/GamePage"
 import CategoryPlaylistsPage from "./pages/CategoryPlaylistsPage"
+import SearchPlaylistsPage from "./pages/SearchPlaylistsPage"
 
 import { createBrowserHistory } from 'history';
 const history = createBrowserHistory()
@@ -44,6 +45,7 @@ const App = ({setToken, token}) => {
                         <Route path="/" component={OverviewSearchpage} exact={true}/>
                         <Route path="/game/:playlistId" component={GamePage}/>
                         <Route path="/category/:categoryId" component={CategoryPlaylistsPage}/>
+                        <Route path="/search/:searchTerm" component={SearchPlaylistsPage} />
                     </Switch>
                 </div>
             </Suspense>  

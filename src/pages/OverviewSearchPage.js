@@ -1,22 +1,31 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {ReactComponent as MaginifyGlassIcon} from "../assets/svg/magnifying-glass.svg"
-import {connect} from "react-redux"
+import {withRouter} from "react-router-dom"
 
 
 import FeaturedPlaylists from "../components/FeaturedPlaylists.component"
 import UserPlaylists from "../components/UserPlaylists.component"
 import CategoryOverview from "../components/CategoryOverview.component"
-const OverviewSeachPage = () => {
+const OverviewSeachPage = ({history}) => {
+    const [searchTerm, setSearchTerm] = useState("")
 
+    const onChangeSerchTerm = (e) => setSearchTerm(e.target.value)
 
+    const onSearchKeyPress = (e) => e.key === "Enter" ? submitSearch() : null
+
+    const submitSearch = () => {
+        if(searchTerm !== ""){
+            history.push(`/search/${searchTerm}`)
+        }
+    }
 
     return (
         <div>
             <div className="input-area">
                 <label htmlFor="search-input" className="input-area__label">             
-                    <input className="input-area__input" id="search-input"/>
+                    <input className="input-area__input" id="search-input" onChange={onChangeSerchTerm} onKeyPress={onSearchKeyPress} value={searchTerm} />
                     <span className="input-area__label-text">search Playlists</span>
-                    <div className="input-area__icon">
+                    <div className="input-area__icon" onClick={submitSearch}>
                         <MaginifyGlassIcon />
                     </div>
                     
@@ -27,10 +36,6 @@ const OverviewSeachPage = () => {
                 <UserPlaylists />
                 <CategoryOverview />
                 
-
-                <div>
-                    Popula
-                </div>
             </div>
         </div>
     )
@@ -39,4 +44,4 @@ const OverviewSeachPage = () => {
 
 
 
-export default OverviewSeachPage
+export default withRouter(OverviewSeachPage)

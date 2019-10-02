@@ -24,16 +24,29 @@ export const setCurrentSongIndex = (songIndex) => ({
     payload: songIndex
 })
 
+export const resetSongs = () => dispatch => {
+    console.log("here")
+    dispatch({type: songsTypes.RESET_SONGS})
+    
+}
+
 
 export const nextSong = (currentSongIndex) => dispatch => {
     console.log(currentSongIndex)
     dispatch(setCurrentSongIndex(currentSongIndex + 1))
 }
 
+const shuffleArray = (array) => {
+    let shuffledArray = [...array]
+    shuffledArray.sort(() => Math.random() - 0.5);
+    return shuffledArray
+} 
+
 const preparePlaylist = (playlist) => {
     const songsWithPreview = playlist.items.reduce((res, item) => item.track.preview_url ? [...res, item] : res, [])
-    // randomize playlist
-    return songsWithPreview
+    // randomize playlist 
+    const randomizedSongs = shuffleArray(songsWithPreview)
+    return randomizedSongs
 }
 
 
@@ -41,12 +54,14 @@ export const fetchPlaylistSongs = (playlistId, accessToken) => dispatch => {
     const url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
 
     dispatch(fetchSongsStart())
+    
 
     fetch(url, createRequestObject(accessToken, {}))
     .then(res => res.json())
     .then(json => {
+        dispatch(setCurrentSongIndex(0))
         dispatch(fetchSongsSuccess(preparePlaylist(json)))
-        dispatch(setCurrentSong(0))
+        
         
     }).catch(error => dispatch(fetchSongsError(error)))
 }
