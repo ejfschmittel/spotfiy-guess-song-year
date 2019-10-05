@@ -18,7 +18,7 @@ const BASE_SCOPES = [
     "user-library-read",
 ];
 
-export const createAccessUrl = (scopes=BASE_SCOPES, redirectUri=DEFAULT_REDIRECT_URI) => {
+export const createAccessUrl = (scopes=BASE_SCOPES, redirectUri=HEROKU_REDIRECT_URI) => {
     return `${authEndpoint}?client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=${scopes.join("%20")}&response_type=token&show_dialog=true`
 }
 
