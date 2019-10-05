@@ -3,17 +3,9 @@ import {connect} from "react-redux"
 
 import {fetchUser} from "../redux/user/user.actions"
 
+const Header = ({user, fetchUser, token, fetchUserError}) => {
 
-const Header = ({user, fetchUser, token, userError}) => {
-
-    useEffect(() => {
-        console.log(token)
-        fetchUser(token)    
-    }, [])
-
-    console.log(user)
-    console.log(userError);
-    
+    useEffect(() => fetchUser(token), [])
 
     return (
         <header className="main-header">
@@ -22,8 +14,7 @@ const Header = ({user, fetchUser, token, userError}) => {
                 {user && 
                     <div className="user-display">
                         <img alt='user' className='user-display__img' src={user.images[0].url} />
-                        <span className="user-display__name">{user.display_name}</span>
-                        
+                        <span className="user-display__name">{user.display_name}</span>                       
                     </div>
                 }
             </div>
@@ -31,15 +22,14 @@ const Header = ({user, fetchUser, token, userError}) => {
     )
 }
 
-const mapStateToProps = (state) => ({
-    token: state.tokenReducer.token,
-    user: state.userReducer.user,
-    userError: state.userReducer.fetchUserError
+const mapStateToProps = ({tokenReducer, userReducer: {user, fetchUserError}}) => ({
+    token: tokenReducer.token,
+    user,
+    fetchUserError
 })
 
 const mapDispatchToProps = (dispatch) => ({
     fetchUser: (accessToken) => dispatch(fetchUser(accessToken))
 })
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header)

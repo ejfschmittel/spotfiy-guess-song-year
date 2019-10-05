@@ -1,7 +1,7 @@
 import playlistTypes from "./playlists.types"
-import createRequestObject from "../utils/createRequestObject"
+import {createSpotifyRequestObject} from "../../spotify/spotify.utils"
 
-
+/* ***** FETCH CATEGORY PLAYLISTS ***** */
 
 const fetchCategoryPlaylistsStart = () => ({
     type: playlistTypes.FETCH_CATEGORY_PLAYLISTS_START
@@ -22,12 +22,13 @@ export const fetchCategoryPlaylists = (categoryId, accessToken) => dispatch => {
 
     dispatch(fetchCategoryPlaylistsStart())
 
-    fetch(url, createRequestObject(accessToken, {}))
+    fetch(url, createSpotifyRequestObject(accessToken, {}))
     .then(res => res.json())
     .then(json => dispatch(fetchCategoryPlaylistsSuccess(json.playlists.items)))
     .catch(error => dispatch(fetchCategoriesPlaylistsError(error)))
 }
 
+/* ***** SEARCH PLAYLISTS ***** */
 
 const seachPlaylistsStart = () => ({
     type: playlistTypes.SEARCH_PLAYLISTS_START
@@ -49,13 +50,13 @@ export const searchPlaylists = (searchTerm, accessToken) => dispatch => {
 
     dispatch(seachPlaylistsStart())
 
-    fetch(url, createRequestObject(accessToken, {}))
+    fetch(url, createSpotifyRequestObject(accessToken, {}))
     .then(res => res.json())
     .then(json => dispatch(searchPlaylistsSuccess(json.playlists.items)))
     .catch(error => dispatch(searchPlaylisstsError(error)))
 }
 
-
+/* ***** FETCH USERS PLAYLISTS ***** */
 
 const fetchUserPlaylistsStart = () => ({
     type: playlistTypes.FETCH_USER_PLAYLISTS_START
@@ -73,14 +74,17 @@ const fetchUserPlaylistsError = (error) => ({
 
 export const fetchUserPlaylists = (accessToken) => dispatch => {
     const url = `https://api.spotify.com/v1/me/playlists?limit=50`
+
     dispatch(fetchUserPlaylistsStart())
 
-    fetch(url, createRequestObject(accessToken, {}))
+    fetch(url, createSpotifyRequestObject(accessToken, {}))
     .then(res => res.json())
     .then(json => dispatch(fetchUserPlaylistsSuccess(json.items)))
     .catch(error => dispatch(fetchUserPlaylistsError(error)))
 }
 
+
+/* ***** FETCH FEATURED PLAYLISTS ***** */
 
 const fetchFeaturedPlaylistsStart = () => ({
     type: playlistTypes.FETCH_FEATURED_PLAYLISTS_START
@@ -98,9 +102,10 @@ const fetchFeaturedPlaylistsError = (error) => ({
 
 export const fetchFeaturedPlaylists = (accessToken) => dispatch => {
     const url = `https://api.spotify.com/v1/browse/featured-playlists`
+
     dispatch(fetchFeaturedPlaylistsStart())
 
-    fetch(url, createRequestObject(accessToken, {}))
+    fetch(url, createSpotifyRequestObject(accessToken, {}))
     .then(res => res.json())
     .then(json => dispatch(fetchFeaturedPlaylistsSuccess(json.playlists.items)))
     .catch(error => dispatch(fetchFeaturedPlaylistsError(error)))

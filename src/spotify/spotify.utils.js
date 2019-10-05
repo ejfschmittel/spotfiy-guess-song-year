@@ -11,32 +11,24 @@ if(hostname === "herokuapp.com"){
     REDIRECT_URI = HEROKU_REDIRECT_URI
 }
 
-
+// needed scopes for api calls after https://developer.spotify.com/documentation/general/guides/scopes/
 const BASE_SCOPES = [
     "playlist-read-collaborative",
-    "playlist-modify-private",
-    "user-modify-playback-state",
-    "user-read-private",
-    "user-library-modify",
-    "user-follow-modify",
-    "user-read-recently-played",
-    "streaming",
-    "user-read-currently-playing",
-    "playlist-modify-public",
-    "user-read-playback-state",
-    "app-remote-control",
-    "user-library-read",
-    "user-follow-read",
-    "user-read-email",
     "playlist-read-private",
-    "user-top-read"
-  ];
+    "user-library-read",
+];
 
-export const createAccessUrl = (scopes=BASE_SCOPES, redirectUri=HEROKU_REDIRECT_URI) => {
+export const createAccessUrl = (scopes=BASE_SCOPES, redirectUri=DEFAULT_REDIRECT_URI) => {
     return `${authEndpoint}?client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=${scopes.join("%20")}&response_type=token&show_dialog=true`
 }
 
+// wrapper for the fetch request options to add the spotify auth header
+export const createSpotifyRequestObject = (token, options = {}) => ({
+    headers: {'Authorization': 'Bearer ' + token},
+    ...options
+})
 
+// extract the hash fragment https://developer.spotify.com/documentation/general/guides/authorization-guide/#implicit-grant-flow
 export const getHash = () => {
     const hash = window.location.hash
     .substring(1)

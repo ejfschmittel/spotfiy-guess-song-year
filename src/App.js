@@ -1,28 +1,26 @@
-import React, {Suspense, lazy, useEffect, useState} from 'react';
+import React, {Suspense, lazy, useEffect} from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import {connect} from "react-redux"
 
-import {getHash, createAccessUrl} from "./utils/spotify.utils"
+import {getHash, createAccessUrl} from "./spotify/spotify.utils"
 import {setToken} from "./redux/token/token.actions"
 
+
+import Header from "./components/header.component"
+import Spinner from "./components/spinner.component"
+
+const OverviewPage = lazy(() => import("./pages/overview.page"))
+const GamePage = lazy(() => import("./pages/game.page"))
+const CategoryOverviewPage = lazy(() => import("./pages/category-overview.page"))
+const SearchPage = lazy(() => import("./pages/search.page"))
+
 import 'style/main.scss'
-// https://github.com/Pau1fitz/react-spotify/tree/master/src
-
-import Header from "./components/Header"
-import OverviewSearchpage from "./pages/OverviewSearchPage"
-import GamePage from "./pages/GamePage"
-import CategoryPlaylistsPage from "./pages/CategoryPlaylistsPage"
-import SearchPlaylistsPage from "./pages/SearchPlaylistsPage"
-
-import { createBrowserHistory } from 'history';
-const history = createBrowserHistory()
 
 
 
-const Placholder = () => <div>Placeholder</div>
 
 const App = ({setToken, token}) => {
-    
+
     useEffect(() => {
         // onload check if hash or token present / then set
         const hash = getHash()
@@ -34,23 +32,21 @@ const App = ({setToken, token}) => {
         }
     },[])
 
-
-
     return token ? (
-        <HashRouter history={history}>
-            <Suspense fallback={<div>Loading...</div>}>
+        <HashRouter>
+            <Suspense fallback={<Spinner />}>
                 <div className="main-container">
                     <Header />
-                    <Switch>
-                        <Route path="/" component={OverviewSearchpage} exact={true}/>
-                        <Route path="/game/:playlistId" component={GamePage}/>
-                        <Route path="/category/:categoryId" component={CategoryPlaylistsPage}/>
-                        <Route path="/search/:searchTerm" component={SearchPlaylistsPage} />
+                    <Switch>                      
+                        <Route path="/" render={() => <OverviewPage />} exact={true}/>
+                        <Route path="/game/:playlistId" render={({match}) => <GamePage match={match}/>}/>
+                        <Route path="/category/:categoryId" render={({match}) => <CategoryOverviewPage match={match} />}/>
+                        <Route path="/search/:searchTerm" render={({match}) => <SearchPage match={match}/>} />                
                     </Switch>
                 </div>
             </Suspense>  
         </HashRouter>
-    ) : <div>Loading...</div>
+    ) : <Spinner />
 }
 
 const mapStateToProps = (state) => ({

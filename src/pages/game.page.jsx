@@ -29,12 +29,11 @@ const GamePage = (props) => {
     const [endReached, setEndReached] = useState(false)
     
     useEffect(() => {
+        console.log("on mount")
         const playlistId = match.params.playlistId
         if(playlistId){
             fetchPlaylistSongs(playlistId, token)
-        }else{
-
-        }    
+        }  
         
         return () => {
             resetSongs()
@@ -45,23 +44,14 @@ const GamePage = (props) => {
         }
     }, [])
 
-    // update song
+    // update song on currentSongindex change or songs update
    useEffect(() => { 
-       if(songs && songs.length != 0){
-        console.log(currentSongIndex)
-        console.log(songs)
-        console.log(songs.length)
-        if(songs.length > currentSongIndex){
+       if(songs && songs.length != 0 && songs.length > currentSongIndex){
             const song = songs[currentSongIndex]
             playSong(song)
             setCurrentSong(song)
-        }else{
-            
-        }
-       }
-       
+       }   
     }, [currentSongIndex, songs])
-
 
     const playSong = (song) => {
         if(audio){ stopSong() }
@@ -88,13 +78,12 @@ const GamePage = (props) => {
         }
     }
 
-    // add reveal animation??
 
     const trackName = currentSong ? currentSong.track.name : null
     const trackArtist = currentSong ? currentSong.track.artists[0].name : null
     const releaseYear = currentSong ? currentSong.track.album.release_date.split("-")[0] : null
     const spotifyUri = currentSong ? currentSong.track.external_urls.spotify : null
-
+    
     return (
         <div className="game-page">
             <h1>{currentSong ? "Guess the Year..." : "Loading..."}</h1>

@@ -23,7 +23,6 @@ const INITIAL_STATE = {
 }
 
 export const playlistReducer = (state = INITIAL_STATE, action) => {
-  console.log(action)
     switch (action.type) {
 
       /* handle CATEGORY PLAYLISTS */

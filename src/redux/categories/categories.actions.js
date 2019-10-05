@@ -1,5 +1,5 @@
 import categoriesTypes from "./categories.types"
-import createRequestObject from "../utils/createRequestObject"
+import {createSpotifyRequestObject} from "../../spotify/spotify.utils"
 
 const fetchCategoriesStart = () => ({
     type: categoriesTypes.FETCH_CATEGORIES_START
@@ -17,10 +17,11 @@ const fetchCategoriesError = (error) => ({
 
 export const fetchCategories = (accessToken) => dispatch => {
     const url = `https://api.spotify.com/v1/browse/categories`
+
     dispatch(fetchCategoriesStart())
 
-    fetch(url, createRequestObject(accessToken, {}))
+    fetch(url, createSpotifyRequestObject(accessToken, {}))
     .then(res => res.json())
-    .then(json => {console.log(json); dispatch(fetchCategoriesSuccess(json.categories.items))})
+    .then(json => {dispatch(fetchCategoriesSuccess(json.categories.items))})
     .catch(error => dispatch(fetchCategoriesError(error)))
 }

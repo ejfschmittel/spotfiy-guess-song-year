@@ -1,28 +1,8 @@
 import songsTypes from "./songs.types"
 
 
-/**
- *  problem: how to only get the good songs
- * 
- * 
- *  centeral wrapper for audio??? or just ummount
- *  centeral audio property => currentSong (in Component)
- *  
- *  new properties:
- *  track count // playlistSong.lenth
- *  playlistSongs  // all playlist songs
- *  playedSongs // count of played songs 
- *  notPlayed song // all playlist songs at the beginning => remove when played
- * 
- * 
- *  
- *  
- */
-
- // shuffle playlist before count
-
 const INITIAL_STATE = {
-    currentSongIndex: 0, // song uri
+    currentSongIndex: 0, 
     songs: [],      
     fetchSongsPending: false,
     fetchSongsError: null,
@@ -31,7 +11,6 @@ const INITIAL_STATE = {
   export const songsReducer = (state = INITIAL_STATE, action) => {
   
     switch (action.type) {
-
     case songsTypes.SET_CURRENT_SONG_INDEX:
       return {...state, currentSongIndex: action.payload }
 

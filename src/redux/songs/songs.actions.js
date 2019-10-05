@@ -1,8 +1,6 @@
 
-import {setArtistIds} from "../artists/artists.actions"
 import songsTypes from "./songs.types"
-import createRequestObject from "../utils/createRequestObject"
-
+import {createSpotifyRequestObject} from "../../spotify/spotify.utils"
 
 
 const fetchSongsStart = () => ({
@@ -25,46 +23,46 @@ export const setCurrentSongIndex = (songIndex) => ({
 })
 
 export const resetSongs = () => dispatch => {
-    console.log("here")
     dispatch({type: songsTypes.RESET_SONGS})
-    
 }
 
-
 export const nextSong = (currentSongIndex) => dispatch => {
-    console.log(currentSongIndex)
     dispatch(setCurrentSongIndex(currentSongIndex + 1))
 }
 
-const shuffleArray = (array) => {
-    let shuffledArray = [...array]
-    shuffledArray.sort(() => Math.random() - 0.5);
-    return shuffledArray
-} 
 
-const preparePlaylist = (playlist) => {
-    const songsWithPreview = playlist.items.reduce((res, item) => item.track.preview_url ? [...res, item] : res, [])
-    // randomize playlist 
-    const randomizedSongs = shuffleArray(songsWithPreview)
-    return randomizedSongs
-}
+const getSongsWithPreview = (playlist) => playlist.items.reduce((res, item) => item.track.preview_url ? [...res, item] : res, [])
 
+const getRandomizedPlaylist = (playlist) => [...playlist].sort(() => Math.random() - 0.5);
+
+const preparePlaylist = (playlist) => getRandomizedPlaylist(getSongsWithPreview(playlist))
 
 export const fetchPlaylistSongs = (playlistId, accessToken) => dispatch => {
     const url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
 
     dispatch(fetchSongsStart())
     
-
-    fetch(url, createRequestObject(accessToken, {}))
+    fetch(url, createSpotifyRequestObject(accessToken, {}))
     .then(res => res.json())
     .then(json => {
         dispatch(setCurrentSongIndex(0))
-        dispatch(fetchSongsSuccess(preparePlaylist(json)))
-        
-        
+        dispatch(fetchSongsSuccess(preparePlaylist(json)))  
     }).catch(error => dispatch(fetchSongsError(error)))
 }
+
+/**
+ * const preparePlaylist = (playlist) => {
+    const songsWithPreview = playlist.items.reduce((res, item) => item.track.preview_url ? [...res, item] : res, [])
+    const randomizedSongs = shuffleArray(songsWithPreview)
+    return randomizedSongs
+
+    const shuffleArray = (array) => {
+    let shuffledArray = [...array]
+    shuffledArray.sort(() => Math.random() - 0.5);
+    return shuffledArray
+} 
+}
+ */
 
 
 
