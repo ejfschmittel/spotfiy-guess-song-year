@@ -1,7 +1,6 @@
 
 /* ABSTRACTS */
 @import "abstracts/variables";
-@import "abstracts/functions";
 @import "abstracts/mixins";
 
 /* BASE */
@@ -10,5 +9,16 @@
 @import "base/typography";
 @import "base/utils";
 
-/* COMMON COMPONENTS */
+/* LAYOUT */
 @import "layout/header";
+
+/* COMPONENTS */
+@import "components/cardsDisplay";
+@import "components/searchInput";
+@import "components/playlistCard";
+@import "components/categoryCard";
+
+/* PAGES */
+@import "pages/gamePage";
+
+

@@ -1,0 +1,79 @@
+.playlist-card{
+    color: #fff;
+    position: relative;
+    border-radius: 1rem;
+    background: #222;
+
+    &__title{
+        flex: 1;    
+    }
+
+    &__image{
+        width: 100%;
+        height: auto;
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
+    }
+
+    &__info{
+        display: flex;
+        font-size: 1rem;
+        align-items: center;
+        padding: .2rem .5rem;
+        margin-bottom: .3rem;
+        @include respond(phone){
+            padding: .4rem .6rem;
+        }
+    }
+
+    &__track-count{
+        @include respond(phone){
+            font-size: 1rem;
+        }
+    }
+
+    &__overlay{
+        position: absolute;
+        top: 0; 
+        width: 100%;
+        left: 0;
+        height: 100%;
+        background: rgba(0,0,0, 0);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+        visibility: hidden;
+        transition: 0.5s background;
+        padding: 1rem;
+        border-radius: 1rem;
+    }
+
+    &__overlay-button{
+        border: none;
+        display: block;
+        text-decoration: none;
+        padding: .6rem .5rem;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #333;
+        outline: none;
+        transform: translateY(-2rem);
+        background: #fff;
+        cursor: pointer;
+        border-radius: .5rem;
+        opacity: .9;
+
+        width: 60%;
+        text-align: center;
+
+        @include respond(phone){
+            font-size: 1.4rem,
+        }
+    }
+
+    &:hover &__overlay{
+        visibility: visible;
+        background: rgba(0,0,0, .5);
+    }
+}

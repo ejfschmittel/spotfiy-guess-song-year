@@ -1,0 +1,93 @@
+.search-input{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 2rem 0;   
+
+    @include respond(tab-land){
+        padding: 3rem 0;
+    }
+
+    &__label{
+        position: relative;
+        display: inline-flex;
+        justify-content: center;  
+        align-items: center;     
+        margin: 0 auto;
+        width: 80%;
+        max-width: 50rem;
+    }
+
+    &__label-text{
+        position: absolute;
+        font-size: 1.4rem;
+        left: 2rem;
+        transition: .3s all;
+        color: #333;
+
+        @include respond(tab-land){
+            font-size: 1.6rem;
+        }
+    }
+
+    &__input:focus + &__label-text{
+        transform: translateY(-2.4rem);
+        color: #fff;
+
+        @include respond(tab-land){
+            transform: translateY(-3.4rem);
+        }
+    }
+
+    &__input{
+        border-radius: 5px;
+        font-size: 1.4rem;
+        border: none;
+        width: 100%;
+        background: #eee;
+        padding: .5rem 2rem;
+        padding-right: 4rem;
+        outline: none;
+
+
+        @include respond(tab-land){
+            font-size: 1.6rem;
+            padding: 1rem 2rem;
+            padding-right: 5rem
+        }
+    }
+
+    &__icon{
+        padding: 0 .5rem;
+        margin-left: -2.5rem;
+        background: #fff;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        border-bottom-right-radius: 5px;
+        border-top-right-radius: 5px;
+        cursor: pointer;
+
+        @include respond(phone){
+            padding: 0 1rem;
+            margin-left: -4rem;
+        }
+
+        & > svg{
+            width: 2rem;
+            height: 2rem;
+            transition: all .3s;
+
+            @include respond(phone){
+                width: 3rem;
+                height: 3rem;
+            }
+        }
+
+        &:hover{
+            & > svg{
+                transform: scale(1.1);
+            }
+        }   
+    }
+}

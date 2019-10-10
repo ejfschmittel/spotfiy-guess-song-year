@@ -1,0 +1,18 @@
+.category-card{
+    position: relative;
+    cursor: pointer;
+
+    &__image{
+       width: 100%;
+       border: 2px solid #eee;
+    }
+
+    &__title{
+        position: absolute;
+        top: 1.8rem;
+        color: #fff;
+        font-size: 1.8rem;
+        width: 100%;
+        text-align: center;
+    }
+}

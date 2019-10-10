@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react'
 import {connect} from "react-redux"
+import {Link} from "react-router-dom"
 
 import {fetchUser} from "../redux/user/user.actions"
 
@@ -9,7 +10,7 @@ const Header = ({user, fetchUser, token, fetchUserError}) => {
 
     return (
         <header className="main-header">
-            <h1 className="main-header__headline">Spotify Song Guessing</h1>
+            <Link to="/" className="main-header__headline">Spotify Song Guessing</Link>
             <div>
                 {user && 
                     <div className="user-display">
