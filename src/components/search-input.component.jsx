@@ -3,8 +3,6 @@ import {withRouter} from "react-router-dom"
 
 import {ReactComponent as MaginifyGlassIcon} from "../assets/svg/magnifying-glass.svg"
 
-//import "../style/components/SearchInput.scss";
-
 const SearchInput = ({history}) => {
     const [searchTerm, setSearchTerm] = useState("")
 

@@ -1,14 +1,15 @@
 const CLIENT_ID = "7e3ba1ff0efe4b9897e67fc21f51e09a"
 export const authEndpoint = 'https://accounts.spotify.com/authorize';
-const DEFAULT_REDIRECT_URI = "http://localhost:3000"
+
+const LOCALHOST_REDIRECT_URI = "http://localhost:3000"
 const HEROKU_REDIRECT_URI = "https://spotify-song-guesser.herokuapp.com/"
 
-const hostname = window && window.location && window.location.hostname;
 
-let REDIRECT_URI = DEFAULT_REDIRECT_URI
-console.log(hostname)
-if(hostname === "herokuapp.com"){
-    REDIRECT_URI = HEROKU_REDIRECT_URI
+let REDIRECT_URI = HEROKU_REDIRECT_URI
+
+// switch redirect url on localhost
+if(location.hostname === "localhost"){
+    REDIRECT_URI = LOCALHOST_REDIRECT_URI
 }
 
 // needed scopes for api calls after https://developer.spotify.com/documentation/general/guides/scopes/
@@ -18,7 +19,7 @@ const BASE_SCOPES = [
     "user-library-read",
 ];
 
-export const createAccessUrl = (scopes=BASE_SCOPES, redirectUri=HEROKU_REDIRECT_URI) => {
+export const createAccessUrl = (scopes=BASE_SCOPES, redirectUri=REDIRECT_URI) => {
     return `${authEndpoint}?client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=${scopes.join("%20")}&response_type=token&show_dialog=true`
 }
 

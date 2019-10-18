@@ -1,7 +1,10 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useContext, useMemo} from 'react'
 import {connect} from "react-redux"
-import {fetchPlaylistSongs, nextSong, resetSongs} from "../redux/songs/songs.actions"
 import {Link} from "react-router-dom"
+
+import {AudioContext} from "../spotify/audio.context"
+
+import {fetchPlaylistSongs, nextSong, resetSongs} from "../redux/songs/songs.actions"
 
 let audio = null
 
@@ -24,12 +27,15 @@ const GamePage = (props) => {
         resetSongs, 
     } = props
 
+    const {startPlaying, stopPlaying} = useContext(AudioContext)
     const [revealed, setRevealed] = useState(false)
     const [currentSong, setCurrentSong] = useState(null)
     const [endReached, setEndReached] = useState(false)
+
     
     useEffect(() => {
         console.log("on mount")
+        
         const playlistId = match.params.playlistId
         if(playlistId){
             fetchPlaylistSongs(playlistId, token)
@@ -37,10 +43,7 @@ const GamePage = (props) => {
         
         return () => {
             resetSongs()
-            if(audio){
-             stopSong()
-             audio = null;
-            }                  
+            stopPlaying()       
         }
     }, [])
 
@@ -48,18 +51,13 @@ const GamePage = (props) => {
    useEffect(() => { 
        if(songs && songs.length != 0 && songs.length > currentSongIndex){
             const song = songs[currentSongIndex]
-            playSong(song)
+            //playSong(song)
+            startPlaying(song.track.preview_url)
             setCurrentSong(song)
        }   
     }, [currentSongIndex, songs])
 
-    const playSong = (song) => {
-        if(audio){ stopSong() }
-        audio = new Audio(song.track.preview_url);
-	    audio.play();
-    }
 
-    const stopSong = () => audio ? audio.pause() : null
 
     const onButtonClick = () => {
         if(songs.length <= currentSongIndex + 1){
@@ -74,27 +72,29 @@ const GamePage = (props) => {
                 nextSong(currentSongIndex);
                 setRevealed(false)
             }
-            stopSong();               
+            stopPlaying();               
         }
     }
 
 
-    const trackName = currentSong ? currentSong.track.name : null
-    const trackArtist = currentSong ? currentSong.track.artists[0].name : null
-    const releaseYear = currentSong ? currentSong.track.album.release_date.split("-")[0] : null
-    const spotifyUri = currentSong ? currentSong.track.external_urls.spotify : null
+    const {trackName, trackArtist, releaseYear, spotifyUri} = useMemo(() => ({
+        trackName: currentSong ? currentSong.track.name : "Title",
+        trackArtist: currentSong ? currentSong.track.artists[0].name : "Artist",
+        releaseYear: currentSong ? currentSong.track.album.release_date.split("-")[0] : "Year",
+        spotifyUri: currentSong ? currentSong.track.external_urls.spotify : "#"
+    }),[currentSong])
     
     return (
         <div className="game-page">
             <h1>{currentSong ? "Guess the Year..." : "Loading..."}</h1>
 
                 <div className="song-display">
-                    <h2 className="song-display__title">{trackName ? trackName : "Title"} - {trackArtist ? trackArtist : "Artist"}</h2>
+                    <h2 className="song-display__title">{trackName} - {trackArtist}</h2>
                     <div className="song-display__text">was released...</div>
 
                     <div className={`song-display__answer ${!revealed ? 'song-display__answer--hidden' : ''}`}>
-                        <div className="song-display__year">{releaseYear ? releaseYear : "Year"}</div>
-                        <a href={spotifyUri ? spotifyUri : "#"}>listen on Spotify</a>
+                        <div className="song-display__year">{releaseYear}</div>
+                        <a href={spotifyUri}>listen on Spotify</a>
                     </div>
 
                     {revealed && endReached ? 
@@ -102,7 +102,6 @@ const GamePage = (props) => {
                     :
                     <button className="song-display__control" onClick={onButtonClick}>{!revealed ? "Reveal" : "Next Song"}</button>
                     }
-                    
                 </div>
         </div>
     )

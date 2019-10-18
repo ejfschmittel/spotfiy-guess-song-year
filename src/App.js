@@ -5,6 +5,8 @@ import {connect} from "react-redux"
 import {getHash, createAccessUrl} from "./spotify/spotify.utils"
 import {setToken} from "./redux/token/token.actions"
 
+import {useAudio, AudioContext} from "./spotify/audio.context"
+
 
 import Header from "./components/header.component"
 import Spinner from "./components/spinner.component"
@@ -18,8 +20,8 @@ import 'style/main.scss'
 
 
 
-
 const App = ({setToken, token}) => {
+    const audioControls = useAudio()
 
     useEffect(() => {
         // onload check if hash or token present / then set
@@ -35,15 +37,17 @@ const App = ({setToken, token}) => {
     return token ? (
         <HashRouter>
             <Suspense fallback={<Spinner />}>
-                <div className="main-container">
-                    <Header />
-                    <Switch>                      
-                        <Route path="/" render={() => <OverviewPage />} exact={true}/>
-                        <Route path="/game/:playlistId" render={({match}) => <GamePage match={match}/>}/>
-                        <Route path="/category/:categoryId" render={({match}) => <CategoryOverviewPage match={match} />}/>
-                        <Route path="/search/:searchTerm" render={({match}) => <SearchPage match={match}/>} />                
-                    </Switch>
-                </div>
+                <AudioContext.Provider value={audioControls}>
+                    <div className="main-container">
+                        <Header />
+                        <Switch>                      
+                            <Route path="/" render={() => <OverviewPage />} exact={true}/>
+                            <Route path="/game/:playlistId" render={({match}) => <GamePage match={match}/>}/>
+                            <Route path="/category/:categoryId" render={({match}) => <CategoryOverviewPage match={match} />}/>
+                            <Route path="/search/:searchTerm" render={({match}) => <SearchPage match={match}/>} />                
+                        </Switch>
+                    </div>
+                </AudioContext.Provider>
             </Suspense>  
         </HashRouter>
     ) : <Spinner />
