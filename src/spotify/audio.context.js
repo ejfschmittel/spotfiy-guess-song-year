@@ -6,6 +6,7 @@ import React, {createContext, useState, useEffect} from 'react'
 export const AudioContext = createContext({})
 
 
+let initalized = false;
 
 export const useAudio = () => {
     const [audio, setAudio] = useState(new Audio())
@@ -24,9 +25,13 @@ export const useAudio = () => {
         // initialize audio safari
         console.log("initialize audio")
         document.body.addEventListener("touchstart", () => {
-            audio.play();
-            audio.pause();
-            audio.setcurrentTime = 0
+            if(!initalized){
+                audio.play();
+                audio.pause();
+                audio.setcurrentTime = 0
+                initalized = true;
+            }
+            
         })
         // cleanup 
         return () => {
