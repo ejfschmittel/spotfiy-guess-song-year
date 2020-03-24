@@ -19,3 +19,11 @@ npm run dev
 ```
 
 ### Demo Screenshots 
+
+Login 
+
+<img src="src/assets/spotify%20login.PNG"/>
+
+Home Page
+
+<img src="src/assets/spotify%20main ui.PNG"/>
